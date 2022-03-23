@@ -1,7 +1,7 @@
 import { ChartLegendOptions, ChartOptions } from 'chart.js'
 import React from 'react'
 import { Line } from 'react-chartjs-2'
-import theme from '../theme'
+import theme from '../../theme'
 
 type Props = {
     xAxisData: number[] | string[]
@@ -16,6 +16,8 @@ const LineChart = ({ xAxisData, yAxisData, title, xLabel, yLabel }: Props) => {
         display: false,
     }
 
+    const formatCurrency = (v: any) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', notation: 'compact' }).format(v);
+
     const options: ChartOptions = {
         title: {
             display: !!title,
@@ -27,6 +29,7 @@ const LineChart = ({ xAxisData, yAxisData, title, xLabel, yLabel }: Props) => {
                 {
                     scaleLabel: { display: !!yLabel, labelString: yLabel },
                     gridLines: { display: false },
+                    ticks: { callback: formatCurrency }
                 },
             ],
             xAxes: [
@@ -37,6 +40,13 @@ const LineChart = ({ xAxisData, yAxisData, title, xLabel, yLabel }: Props) => {
                 },
             ],
         },
+        tooltips: {
+            callbacks: {
+                label: (tooltipItem, data) => {
+                    return formatCurrency(tooltipItem.yLabel);
+                }
+            }
+        }
     }
 
     return (
